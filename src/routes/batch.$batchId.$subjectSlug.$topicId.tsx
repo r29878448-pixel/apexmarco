@@ -7,7 +7,7 @@ import { RowSkeleton, EmptyState, ErrorState } from "@/components/apex/states";
 import {
   attachmentUrl,
   batchDetailsQuery,
-  buildWatchPath,
+  buildPlayPath,
   contentsQuery,
   dppTestsQuery,
   scheduleDetailsQuery,
@@ -140,7 +140,8 @@ function TopicPage() {
                     key={item._id}
                     item={item}
                     batchId={batchId}
-                    subjectId={subjectId}
+                    batchSlug={batchSlug ?? ""}
+                    subjectSlug={subjectSlug}
                   />
                 ) : (
                   <NotesRow
@@ -160,15 +161,16 @@ function TopicPage() {
 function VideoRow({
   item,
   batchId,
-  subjectId,
+  batchSlug,
+  subjectSlug,
 }: {
   item: ContentItem;
   batchId: string;
-  subjectId: string;
+  batchSlug: string;
+  subjectSlug: string;
 }) {
   const title = item.topic ?? item.videoDetails?.name ?? "Lecture";
-  const href = buildWatchPath({ batchId, subjectId, scheduleId: item._id }) +
-    `&title=${encodeURIComponent(title)}`;
+  const href = buildPlayPath({ batchSlug, subjectSlug, scheduleId: item._id, batchId, title });
   const thumb = item.videoDetails?.image;
   return (
     <a

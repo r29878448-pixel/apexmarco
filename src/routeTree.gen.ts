@@ -11,7 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as BatchesRouteImport } from './routes/batches'
-import { Route as WatchRouteImport } from './routes/watch'
+import { Route as PlayRouteImport } from './routes/play'
 import { Route as ApiContentSplatRouteImport } from './routes/api/content/$'
 import { Route as BatchBatchIdIndexRouteImport } from './routes/batch.$batchId.index'
 import { Route as BatchBatchIdSubjectSlugIndexRouteImport } from './routes/batch.$batchId.$subjectSlug.index'
@@ -27,9 +27,9 @@ const BatchesRoute = BatchesRouteImport.update({
   path: '/batches',
   getParentRoute: () => rootRouteImport,
 } as any)
-const WatchRoute = WatchRouteImport.update({
-  id: '/watch',
-  path: '/watch',
+const PlayRoute = PlayRouteImport.update({
+  id: '/play',
+  path: '/play',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiContentSplatRoute = ApiContentSplatRouteImport.update({
@@ -58,7 +58,7 @@ const BatchBatchIdSubjectSlugTopicIdRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/batches': typeof BatchesRoute
-  '/watch': typeof WatchRoute
+  '/play': typeof PlayRoute
   '/api/content/$': typeof ApiContentSplatRoute
   '/batch/$batchId/': typeof BatchBatchIdIndexRoute
   '/batch/$batchId/$subjectSlug/$topicId': typeof BatchBatchIdSubjectSlugTopicIdRoute
@@ -67,7 +67,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/batches': typeof BatchesRoute
-  '/watch': typeof WatchRoute
+  '/play': typeof PlayRoute
   '/api/content/$': typeof ApiContentSplatRoute
   '/batch/$batchId': typeof BatchBatchIdIndexRoute
   '/batch/$batchId/$subjectSlug/$topicId': typeof BatchBatchIdSubjectSlugTopicIdRoute
@@ -77,7 +77,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/batches': typeof BatchesRoute
-  '/watch': typeof WatchRoute
+  '/play': typeof PlayRoute
   '/api/content/$': typeof ApiContentSplatRoute
   '/batch/$batchId/': typeof BatchBatchIdIndexRoute
   '/batch/$batchId/$subjectSlug/$topicId': typeof BatchBatchIdSubjectSlugTopicIdRoute
@@ -88,7 +88,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/batches'
-    | '/watch'
+    | '/play'
     | '/api/content/$'
     | '/batch/$batchId/'
     | '/batch/$batchId/$subjectSlug/$topicId'
@@ -97,7 +97,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/batches'
-    | '/watch'
+    | '/play'
     | '/api/content/$'
     | '/batch/$batchId'
     | '/batch/$batchId/$subjectSlug/$topicId'
@@ -106,7 +106,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/batches'
-    | '/watch'
+    | '/play'
     | '/api/content/$'
     | '/batch/$batchId/'
     | '/batch/$batchId/$subjectSlug/$topicId'
@@ -116,7 +116,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   BatchesRoute: typeof BatchesRoute
-  WatchRoute: typeof WatchRoute
+  PlayRoute: typeof PlayRoute
   ApiContentSplatRoute: typeof ApiContentSplatRoute
   BatchBatchIdIndexRoute: typeof BatchBatchIdIndexRoute
   BatchBatchIdSubjectSlugTopicIdRoute: typeof BatchBatchIdSubjectSlugTopicIdRoute
@@ -139,11 +139,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BatchesRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/watch': {
-      id: '/watch'
-      path: '/watch'
-      fullPath: '/watch'
-      preLoaderRoute: typeof WatchRouteImport
+    '/play': {
+      id: '/play'
+      path: '/play'
+      fullPath: '/play'
+      preLoaderRoute: typeof PlayRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/content/$': {
@@ -180,7 +180,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   BatchesRoute: BatchesRoute,
-  WatchRoute: WatchRoute,
+  PlayRoute: PlayRoute,
   ApiContentSplatRoute: ApiContentSplatRoute,
   BatchBatchIdIndexRoute: BatchBatchIdIndexRoute,
   BatchBatchIdSubjectSlugTopicIdRoute: BatchBatchIdSubjectSlugTopicIdRoute,

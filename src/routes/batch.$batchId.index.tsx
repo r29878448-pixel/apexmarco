@@ -5,7 +5,7 @@ import { BookOpen, ChevronRight, Clock, PlayCircle } from "lucide-react";
 import { CardSkeleton, EmptyState, ErrorState } from "@/components/apex/states";
 import {
   batchDetailsQuery,
-  buildWatchPath,
+  buildPlayPath,
   imageUrl,
   todaysScheduleQuery,
   type ScheduleItem,
@@ -45,10 +45,14 @@ function timeLabel(item: ScheduleItem): string {
 
 function TodaysClasses({
   batchId,
-  fallbackSubjectId,
+  batchSlug,
+  subjectSlugById,
+  fallbackSubjectSlug,
 }: {
   batchId: string;
-  fallbackSubjectId: string;
+  batchSlug: string;
+  subjectSlugById: Record<string, string>;
+  fallbackSubjectSlug: string;
 }) {
   const schedule = useQuery(todaysScheduleQuery(batchId));
   const items: ScheduleItem[] = schedule.data ?? [];
@@ -67,16 +71,23 @@ function TodaysClasses({
       ) : (
         <div className="-mx-4 mt-3 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-2">
           {items.map((item) => {
-            const subjectId = item.batchSubjectId ?? item.subjectId ?? fallbackSubjectId;
+            const subjectSlug =
+              (item.batchSubjectId ? subjectSlugById[item.batchSubjectId] : undefined) ??
+              (item.subjectId ? subjectSlugById[item.subjectId] : undefined) ??
+              fallbackSubjectSlug;
             const status = classStatus(item);
             const meta = status ? STATUS_META[status] : null;
             // Only the source's own banner — no batch-cover stand-in.
             const banner = item.videoDetails?.image ?? null;
             const title = item.topic ?? item.videoDetails?.name ?? null;
             const when = timeLabel(item);
-            const href =
-              buildWatchPath({ batchId, subjectId, scheduleId: item._id }) +
-              (title ? `&title=${encodeURIComponent(title)}` : "");
+            const href = buildPlayPath({
+              batchSlug,
+              subjectSlug,
+              scheduleId: item._id,
+              batchId,
+              ...(title ? { title } : {}),
+            });
             return (
               <a
                 key={item._id}
@@ -210,8 +221,14 @@ function BatchPage() {
 
           <TodaysClasses
             batchId={batchId}
-            fallbackSubjectId={batch.subjects?.[0]?._id ?? ""}
-            fallbackImage={cover}
+            batchSlug={batch.slug}
+            subjectSlugById={Object.fromEntries(
+              (batch.subjects ?? []).flatMap((s) => [
+                [s._id, s.slug] as [string, string],
+                ...(s.subjectId ? [[s.subjectId, s.slug] as [string, string]] : []),
+              ]),
+            )}
+            fallbackSubjectSlug={batch.subjects?.[0]?.slug ?? ""}
           />
 
           <h2 className="mt-6 text-lg font-bold">Subjects</h2>
