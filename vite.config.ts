@@ -17,7 +17,7 @@ export default defineConfig({
     server: { entry: "server" },
   },
   nitro: {
-    ...(isCloudflarePages ? { preset: "cloudflare_pages", output: { dir: "dist" } } : {}),
+    ...(isCloudflarePages ? { preset: "cloudflare-pages", output: { dir: "dist" } } : {}),
     cloudflare: {
       // Cloudflare needs Node compatibility for the SSR worker, otherwise the
       // deployed site fails to render on the first request.
