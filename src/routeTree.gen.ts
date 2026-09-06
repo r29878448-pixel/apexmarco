@@ -12,7 +12,6 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as BatchesRouteImport } from './routes/batches'
 import { Route as PlayRouteImport } from './routes/play'
-import { Route as WatchRouteImport } from './routes/watch'
 import { Route as ApiContentSplatRouteImport } from './routes/api/content/$'
 import { Route as BatchBatchIdIndexRouteImport } from './routes/batch.$batchId.index'
 import { Route as BatchBatchIdSubjectSlugIndexRouteImport } from './routes/batch.$batchId.$subjectSlug.index'
@@ -31,11 +30,6 @@ const BatchesRoute = BatchesRouteImport.update({
 const PlayRoute = PlayRouteImport.update({
   id: '/play',
   path: '/play',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const WatchRoute = WatchRouteImport.update({
-  id: '/watch',
-  path: '/watch',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiContentSplatRoute = ApiContentSplatRouteImport.update({
@@ -65,7 +59,6 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/batches': typeof BatchesRoute
   '/play': typeof PlayRoute
-  '/watch': typeof WatchRoute
   '/api/content/$': typeof ApiContentSplatRoute
   '/batch/$batchId/': typeof BatchBatchIdIndexRoute
   '/batch/$batchId/$subjectSlug/$topicId': typeof BatchBatchIdSubjectSlugTopicIdRoute
@@ -75,7 +68,6 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/batches': typeof BatchesRoute
   '/play': typeof PlayRoute
-  '/watch': typeof WatchRoute
   '/api/content/$': typeof ApiContentSplatRoute
   '/batch/$batchId': typeof BatchBatchIdIndexRoute
   '/batch/$batchId/$subjectSlug/$topicId': typeof BatchBatchIdSubjectSlugTopicIdRoute
@@ -86,7 +78,6 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/batches': typeof BatchesRoute
   '/play': typeof PlayRoute
-  '/watch': typeof WatchRoute
   '/api/content/$': typeof ApiContentSplatRoute
   '/batch/$batchId/': typeof BatchBatchIdIndexRoute
   '/batch/$batchId/$subjectSlug/$topicId': typeof BatchBatchIdSubjectSlugTopicIdRoute
@@ -98,7 +89,6 @@ export interface FileRouteTypes {
     | '/'
     | '/batches'
     | '/play'
-    | '/watch'
     | '/api/content/$'
     | '/batch/$batchId/'
     | '/batch/$batchId/$subjectSlug/$topicId'
@@ -108,7 +98,6 @@ export interface FileRouteTypes {
     | '/'
     | '/batches'
     | '/play'
-    | '/watch'
     | '/api/content/$'
     | '/batch/$batchId'
     | '/batch/$batchId/$subjectSlug/$topicId'
@@ -118,7 +107,6 @@ export interface FileRouteTypes {
     | '/'
     | '/batches'
     | '/play'
-    | '/watch'
     | '/api/content/$'
     | '/batch/$batchId/'
     | '/batch/$batchId/$subjectSlug/$topicId'
@@ -129,7 +117,6 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   BatchesRoute: typeof BatchesRoute
   PlayRoute: typeof PlayRoute
-  WatchRoute: typeof WatchRoute
   ApiContentSplatRoute: typeof ApiContentSplatRoute
   BatchBatchIdIndexRoute: typeof BatchBatchIdIndexRoute
   BatchBatchIdSubjectSlugTopicIdRoute: typeof BatchBatchIdSubjectSlugTopicIdRoute
@@ -157,13 +144,6 @@ declare module '@tanstack/react-router' {
       path: '/play'
       fullPath: '/play'
       preLoaderRoute: typeof PlayRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/watch': {
-      id: '/watch'
-      path: '/watch'
-      fullPath: '/watch'
-      preLoaderRoute: typeof WatchRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/content/$': {
@@ -201,7 +181,6 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   BatchesRoute: BatchesRoute,
   PlayRoute: PlayRoute,
-  WatchRoute: WatchRoute,
   ApiContentSplatRoute: ApiContentSplatRoute,
   BatchBatchIdIndexRoute: BatchBatchIdIndexRoute,
   BatchBatchIdSubjectSlugTopicIdRoute: BatchBatchIdSubjectSlugTopicIdRoute,
