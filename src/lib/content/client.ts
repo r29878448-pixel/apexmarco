@@ -252,47 +252,47 @@ export function attachmentUrl(a: Attachment | undefined | null): string | null {
 
 /* ------------------------------------------------------------- playback */
 
-export const STREAM_API = "https://pw-stream.pages.dev/api/video-url";
-export const PLAYER_ORIGIN = "https://pw-player2.ai.studio";
+export const PLAYER_ORIGIN = "https://pwxmarco.pages.dev";
 
-/** In-app watch page path for a lecture / DPP video. */
-export function buildWatchPath(input: { batchId: string; subjectId: string; scheduleId: string }) {
-  const params = new URLSearchParams({
-    batchId: input.batchId,
-    subjectId: input.subjectId,
-    scheduleId: input.scheduleId,
-  });
-  return `/watch?${params.toString()}`;
-}
-
-/** Resolves the HLS (m3u8) stream URL for a schedule item. */
-export async function fetchStreamUrl(input: {
-  batchId: string;
-  subjectId: string;
+/**
+ * Internal hop that resolves a lecture's full details and then hands off to the
+ * external player. Slugs are needed because only the schedule-details endpoint
+ * carries the player's fields (slug, dRoomId, conversationId, video key).
+ */
+export function buildPlayPath(input: {
+  batchSlug: string;
+  subjectSlug: string;
   scheduleId: string;
-}): Promise<string> {
-  const params = new URLSearchParams(input as unknown as Record<string, string>);
-  const res = await fetch(`${STREAM_API}?${params.toString()}`, {
-    headers: { Accept: "application/json" },
+  batchId: string;
+  title?: string | undefined;
+}) {
+  const params = new URLSearchParams({
+    batchSlug: input.batchSlug,
+    subjectSlug: input.subjectSlug,
+    scheduleId: input.scheduleId,
+    batchId: input.batchId,
   });
-  const json = (await res.json().catch(() => null)) as Record<string, unknown> | null;
-  const hls =
-    (json?.["HLS_STREAM_URL"] as string | undefined) ??
-    (json?.["hls_url"] as string | undefined) ??
-    null;
-  if (!hls) throw new ContentError("Stream isn't available for this lecture yet.", res.status || 502);
-  return hls;
+  if (input.title) params.set("title", input.title);
+  return `/play?${params.toString()}`;
 }
 
-export const streamUrlQuery = (input: { batchId: string; subjectId: string; scheduleId: string }) => ({
-  queryKey: ["stream-url", input.batchId, input.subjectId, input.scheduleId],
-  queryFn: () => fetchStreamUrl(input),
-  staleTime: 60 * 1000,
-  retry: 1,
-});
-
-export function buildPlayerEmbedUrl(m3u8: string) {
-  return `${PLAYER_ORIGIN}/?url=${encodeURIComponent(m3u8)}`;
+/** Builds the external player URL from a lecture's schedule details. */
+export function buildPlayerUrl(details: ScheduleDetails, fallbackBatchId?: string) {
+  const params = new URLSearchParams({
+    video_id: details._id ?? "",
+    video_key: details.videoDetails?._id ?? details.videoDetails?.id ?? "",
+    batchSubjectId: details.batchSubjectId ?? "",
+    title: details.topic ?? details.videoDetails?.name ?? "",
+    bookingId: "",
+    slug: details.slug ?? "",
+    dRoomId: details.dRoomId ?? "",
+    conversationId: details.conversationId ?? "",
+    subject_id: details.subject?._id ?? "",
+    batch_id: details.batchId ?? fallbackBatchId ?? "",
+    tags_id: details.tagIds?.[0] ?? details.tags?.[0]?._id ?? "",
+  });
+  return `${PLAYER_ORIGIN}/play.php?${params.toString()}`;
 }
+
 
 
