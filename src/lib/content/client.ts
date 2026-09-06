@@ -116,9 +116,16 @@ export type Homework = {
 
 /** Full detail for a single schedule item — the only place attachment keys are populated. */
 export type ScheduleDetails = ContentItem & {
+  batchId?: string;
   batchSubjectId?: string;
   isDPPNotes?: boolean;
+  slug?: string;
+  dRoomId?: string | null;
+  conversationId?: string | null;
+  tagIds?: string[];
+  subject?: { _id?: string; name?: string; slug?: string };
 };
+
 
 export function imageUrl(ref: ImageRef | undefined, fallback?: string | null): string | null {
   if (ref?.baseUrl && ref?.key) return `${ref.baseUrl}${ref.key}`;
